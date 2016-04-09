@@ -1,6 +1,7 @@
 #include "dnf.h"
 #include <math.h>
 #include <iostream>
+#include <iomanip>
 
 std::vector<double> conv(std::vector<double> const &f, std::vector<double> const &g) {
 	int const nf = f.size();
@@ -82,12 +83,15 @@ std::vector<double> DNF::getSumStims(){
 
 void DNF::step(){
 	std::vector<double> stimVec = getSumStims();
+//for (unsigned int i=0; i<stimVec.size();i++) std::cout<<std::setprecision(4)<<std::fixed<<i<<": "<<stimVec[i]<<std::endl; std::cout<<std::endl<<std::endl;
+	
 	// do DNF step()	
 	for (int i=0; i<size; i++){
 		activation[i] = activation[i] + (1.0 / tau * (- activation[i] + h + (stimVec[i]+lateralInteraction.output[i])));
 		output[i] = sigmoid(activation[i],beta);
 	} 	
-	
+//for (unsigned int i=0; i<activation.size();i++) std::cout<<std::setprecision(4)<<std::fixed<<i<<": "<<activation[i]<<std::endl; std::cout<<std::endl<<std::endl;
+//for (unsigned int i=0; i<output.size();i++) std::cout<<std::setprecision(4)<<std::fixed<<i<<": "<<output[i]<<std::endl; std::cout<<std::endl<<std::endl;
 	
 	// lateral step	
 	lateralInteraction.fullSum = 0.0;
@@ -104,8 +108,8 @@ void DNF::step(){
 	for ( int i = 0; i < size; i++ ) {
 		lateralInteraction.output[i] = convOut[i] + lateralInteraction.amplitudeGlobal * lateralInteraction.fullSum;
 	}
-	
-	
+//for (unsigned int i=0; i<lateralInteraction.kernel.size();i++) std::cout<<std::setprecision(4)<<std::fixed<<i<<": "<<lateralInteraction.kernel[i]<<std::endl; std::cout<<std::endl<<std::endl;	
+//for (unsigned int i=0; i<convOut.size();i++) std::cout<<std::setprecision(4)<<std::fixed<<i<<": "<<convOut[i]<<std::endl; std::cout<<std::endl<<std::endl;
 
 }
 

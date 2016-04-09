@@ -6,7 +6,7 @@
 using namespace std;
 #include <fstream>
 #define INPUTS 8
-#define SEQUENCES 1
+#define SEQUENCES 350
 
 
 void printVec(std::vector<double> in){
@@ -27,8 +27,8 @@ int getState(std::vector<double> inputVec){
     int maxID = 0;
 	std::cout<<" Sum: ";
     for (int i=0; i<8;i++){    
-        int start = 5+i*10;
-        int stop =5+(i+1)*10+1;
+        int start = 4+i*10;
+        int stop =4+(i+1)*10+1;
 		double currentSum = 0.0;
         for (int s=start;s<stop;s++) currentSum += inputVec[s];
         std::cout<<std::setprecision(0)<<std::fixed<<currentSum<<" ";		
@@ -80,14 +80,14 @@ int main(int argc, const char *argv[]){
 	double sigma_input = 10;
 	vector<double> amps;
 	for (int i=0;i<numStims;i++) {
-		dnf->addStim((i+1)*10,sigma_input);
+		dnf->addStim((i+1)*10-1,sigma_input);
 		amps.push_back(0.0);
 	}
 
 	std::string inputFilename = "inputs";	
 	std::vector<std::vector<double> > inputs = loadInput(inputFilename);
 	for (int i=0;i<SEQUENCES;i++){
-		std::cout<<"Input: ";printVec(inputs[i]);
+//		std::cout<<"Input: ";printVec(inputs[i]);
 		dnf->setAmplitudes(inputs[i]);
 		//for (unsigned int j=0; j<inputs[i].size();j++) std::cout<<inputs[i][j]<<" ";
 		dnf->step();
