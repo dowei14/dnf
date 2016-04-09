@@ -1,10 +1,12 @@
+#include <math.h>
 #include <iostream>
 #include "dnf/dnf.h"
 
 using namespace std;
 #include <fstream>
 #define INPUTS 8
-#define SEQUENCES 10
+#define SEQUENCES 350
+
 
 void printVec(std::vector<double> in){
 	for (unsigned int i=0; i<in.size();i++) std::cout<<in[i]<<" ";
@@ -44,7 +46,7 @@ std::vector<std::vector<double> > loadInput(std::string filename){
 		std::vector<double> tmp;
 		for (int j=0;j<INPUTS;j++) {
 			infile >> in;
-			tmp.push_back(in);
+			tmp.push_back(in*50);
 		}
 		inputs.push_back(tmp);
 	}
@@ -91,6 +93,7 @@ int main(int argc, const char *argv[]){
 	for (int i=0;i<SEQUENCES;i++){
 		//std::cout<<"Input: ";printVec(inputs[i]);
 		dnf->setAmplitudes(inputs[i]);
+		for (unsigned int j=0; j<inputs[i].size();j++) std::cout<<inputs[i][j]<<" ";
 		dnf->step();
 		std::cout<<"Class: "<<getState(dnf->getOutput())<<std::endl;  
 	}  

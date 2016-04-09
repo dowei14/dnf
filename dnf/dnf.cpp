@@ -30,7 +30,7 @@ double DNF::gauss(int pos, int mu, double sigma){
 		if (pos == mu) return 1.0;
 		else return 0.0;
 	} else {
-		return exp(-0.5 * pow((pos-mu),2) / pow(sigma,2));
+		return exp(-0.5 * pow((pos-mu),2.0) / pow(sigma,2.0));
 	}
 }
 
