@@ -1,16 +1,17 @@
 #include <math.h>
 #include <iostream>
+#include <iomanip> 
 #include "dnf/dnf.h"
 
 using namespace std;
 #include <fstream>
 #define INPUTS 8
-#define SEQUENCES 350
+#define SEQUENCES 1
 
 
 void printVec(std::vector<double> in){
 	for (unsigned int i=0; i<in.size();i++) std::cout<<in[i]<<" ";
-	std::cout<<std::endl;
+//	std::cout<<std::endl;
 }
 void printVecLine(std::vector<double> in){
 	for (unsigned int i=0; i<in.size();i++) std::cout<<i<<": "<<in[i]<<std::endl;
@@ -22,13 +23,15 @@ int getState(std::vector<double> inputVec){
 		std::cout<<"--- Wrong Size ---"<<std::endl;
 		return -1;
 	}
-	double max = 0;
+	double max = -9999;
     int maxID = 0;
+	std::cout<<" Sum: ";
     for (int i=0; i<8;i++){    
         int start = 5+i*10;
-        int stop =5+(i+1)*10;
+        int stop =5+(i+1)*10+1;
 		double currentSum = 0.0;
-        for (int s=start;s<stop;s++) currentSum += inputVec[s];			
+        for (int s=start;s<stop;s++) currentSum += inputVec[s];
+        std::cout<<std::setprecision(0)<<std::fixed<<currentSum<<" ";		
         if (currentSum > max){
             max = currentSum;
             maxID = i;
@@ -46,12 +49,13 @@ std::vector<std::vector<double> > loadInput(std::string filename){
 		std::vector<double> tmp;
 		for (int j=0;j<INPUTS;j++) {
 			infile >> in;
-			tmp.push_back(in*50);
+			tmp.push_back((double)in*50.0);
 		}
 		inputs.push_back(tmp);
 	}
 	return inputs;
 }
+
 
 int main(int argc, const char *argv[]){
 	cout<<"--- start ---"<<endl<<endl<<endl;
@@ -79,22 +83,15 @@ int main(int argc, const char *argv[]){
 		dnf->addStim((i+1)*10,sigma_input);
 		amps.push_back(0.0);
 	}
-/*	
-	for (int i=0;i<numStims;i++){
-		for (int j=0;j<numStims;j++) amps[j]=0.0;
-		amps[i]=1.0;
-		dnf->setAmplitudes(amps);
-		for (int j=0;j<10;j++) dnf->step();
-		cout<<"State: "<<getState(dnf->getOutput())<<endl;
-	}	
-*/
+
 	std::string inputFilename = "inputs";	
 	std::vector<std::vector<double> > inputs = loadInput(inputFilename);
 	for (int i=0;i<SEQUENCES;i++){
-		//std::cout<<"Input: ";printVec(inputs[i]);
+		std::cout<<"Input: ";printVec(inputs[i]);
 		dnf->setAmplitudes(inputs[i]);
-		for (unsigned int j=0; j<inputs[i].size();j++) std::cout<<inputs[i][j]<<" ";
+		//for (unsigned int j=0; j<inputs[i].size();j++) std::cout<<inputs[i][j]<<" ";
 		dnf->step();
+		//for (unsigned int j=0; j<dnf->getOutput().size();j++) std::cout<<std::setprecision(10)<<std::fixed<<dnf->getOutput()[j]*10000<<" ";
 		std::cout<<"Class: "<<getState(dnf->getOutput())<<std::endl;  
 	}  
 
